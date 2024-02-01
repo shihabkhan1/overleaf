@@ -1,0 +1,14 @@
+# Book settings
+title: How to setup Overleaf Community Edition
+author: Dr Shihab Khan
+
+repository:
+  url: https://github.com/shihabkhan1/overleaf
+
+html:
+  use_edit_page_button: true
+  use_repository_button: true
+  use_issues_button: true
+
+parse:
+  myst_extended_syntax: true

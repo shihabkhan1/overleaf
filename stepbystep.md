@@ -1,88 +1,106 @@
-# How to setup Overleaf community edition
-
-## 1 Introduction
-
-## 2 Procedure
+# Step-by-Step
+## Overview
 
 1. Install docker
 2. Install overleaf community edition
-3. Edit docker-compose.yml
+3. Edit `docker-compose.yml`.
 
-This will enable users within the same network to access overleaf
+    This will enable users within the same network to access overleaf
 
 4. Change directory to downloaded overleaf directory
-5. Run docker-compose up
+5. Run `docker-compose up`
 
-This will download all the libraries required for your overleaf instance
+    This will download all the libraries required for your overleaf instance
 
 6. Create users
 
-## 3 Docker
+## Docker
 
-### 3.1 Installation
+### Installation
 
-$\$$ sudo apt-get install docker-compose
+```
+ sudo apt-get install docker-compose
+```
 
-### 3.2 List of useful docker commands
+### List of useful docker commands
 
 - List all docker containers:
 
-$\$$ docker ps
-
+    ```
+    docker ps
+    ```
 - Kill running docker process
 
-$\$$ docker kill <container ID>
-
-Note: Use docker ps to obtain container IDs
+    ```
+    docker kill <container ID>
+    ```
+    Note: Use docker ps to obtain container IDs
 
 - Remove all docker containers:
 
-$\$$ docker rm -f $\$($ docker ps $-a-q)$
-
+    ```
+    docker rm -f $\$($ docker ps $-a-q)$
+    ```
+    
 - Remove all docker images:
 
-$$
-\$ \text { docker rmi -f } \$ \text { (docker images }-q)
-$$
-
+    ```
+    docker rmi -f $(docker images -q)
+    ```
+    
 - Open up a bash session inside sharelatex container:
 
-\$ docker exec -it sharelatex bash
-
+    ```
+    docker exec -it sharelatex bash    
+    ```
+    
 - Display container images:
 
-$\$$ sudo docker images --format 'table
+    ```
+    sudo docker images --format 'table {{.Repository}}\t{{.Tag}}\t{{.Size}}'
+    ```
 
-$\hookrightarrow \quad\{\{$. Repository $\}\} \backslash t\{\{$.Tag $\}\} \backslash t\{\{$.Size $\}\}\}^{\prime}$
-
-## 4 Setting up overleaf community edition
+## Setting up Overleaf community edition
 
 NOTE: Overleaf is still referred to as sharelatex in the containers, images, and directories created.
 
-### 4.1 Download overleaf
+### Download Overleaf
 
-\$ git clone https://github.com/overleaf/overleaf.git
+```
+git clone https://github.com/overleaf/overleaf.git
+```
+    
+Or download the repository from [HERE](https://github.com/overleaf/overleaf.git)
 
-Or download the repository from HERE
+### Edit `docker-compose.yml`
 
-### 4.2 Edit docker-compose.yml
-
-docker-compose.yml contains instructions for docker to run your overleaf instance with. In case you want to enable access to your overleaf instance for other users on the same network, uncomment the following lines from your docker-compose.yml:
-
-![](https://cdn.mathpix.com/cropped/2023_11_07_076a939ab2d3ecbe9f96g-4.jpg?height=459&width=1055&top_left_y=2252&top_left_x=296)
+`docker-compose.yml` contains instructions for docker to run your overleaf instance with. In case you want to enable access to your overleaf instance for other users on the same network, uncomment the following lines from your docker-compose.yml:
+    
+```
+nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+        #- "80:80"
+        - "443:443"
+    volumes:
+        - /var/run/docker.sock:/tmp/docker.sock:ro
+        - /home/sharelatex/tmp:/etc/nginx/certs
+```
+    
 
 Note: In case there are other applications using your port 80 and 443 , there maybe some conflicts with your overleaf instance.
 
-### 4.3 Accessing overleaf
+### Accessing overleaf
 
 To access overleaf, go to http://localhost/launchpad on your overleaf host machine.
 
 ![](https://cdn.mathpix.com/cropped/2023_11_07_076a939ab2d3ecbe9f96g-5.jpg?height=55&width=1694&top_left_y=652&top_left_x=181)
 host machine.
 
-### 4.4 Creating users
+### Creating users
 
-### 4.4.1 Create admin user
+### Create admin user
 
 1. Create new user with the following command
 
@@ -91,7 +109,7 @@ host machine.
 2. Edit password token by substituting localhost with <ip>
 3. Share edited token with user to create password
 
-### 4.4.2 Create regular user
+## Create regular user
 
 1. Create new user with the following command
 
@@ -102,13 +120,13 @@ host machine.
 
 NOTE: (Alternatively) Admins can create regular users can also be created from the Overleaf launchpad.
 
-### 4.4.3 Delete users
+### Delete users
 
 ![](https://cdn.mathpix.com/cropped/2023_11_07_076a939ab2d3ecbe9f96g-6.jpg?height=113&width=1483&top_left_y=369&top_left_x=275)
 
 NOTE: For more help on user management refer to THIS link.
 
-### 4.5 Upgrading TeXLive
+### Upgrading TeXLive
 
 Overleaf comes with TeXLive-basic preinstalled. In case you want to make any changes to the LaTeX packages, you can:
 
@@ -140,7 +158,7 @@ $\$$ sudo docker images --format 'table
 
 $\hookrightarrow\{\{$.Repository $\}\} \backslash t\{\{$.Tag $\}\} \backslash t\{\{$. Size $\}\}\}^{\prime}$
 
-### 4.6 Backing up overleaf data
+### Backing up overleaf data
 
 Backing up Overleaf data essentially boils down to backing up three directories:
 
@@ -149,32 +167,3 @@ Backing up Overleaf data essentially boils down to backing up three directories:
 3. /redis_databackup-new/
 
 For the recommended process of backing up Overleaf, check THIS link.
-
-## 5 Issues
-
-### 5.1 Could not connect to docker
-
-![](https://cdn.mathpix.com/cropped/2023_11_07_076a939ab2d3ecbe9f96g-7.jpg?height=156&width=1515&top_left_y=1421&top_left_x=248)
-
-Solution :
-
-Give user permissions to docker
-
-\$ sudo usermod -a -G docker \$USER
-
-### 5.2 Port 80 unavailable
-
-ERROR: for sharelatex Cannot start service sharelatex: driver failed programming external connectivity on endpoint sharelatex (742 e41424927f1729ac27b28aa852248f059514beefdbaac19422bb05689adce): Bind for 0.0.0.0:80 failed: port is already allocated
-
-Solution : Check for applications/processes using port 80 and get process id $\langle$ pid>
-
-\$ sudo lsof -i -P -n I grep LISTEN
-
-Kill process:
-
-$\$$ kill $-9<$ pid $>$
-
-Note: If nothing works, remove all images and containers, close all processes, and reinstall overleaf.
-
-## References
-
