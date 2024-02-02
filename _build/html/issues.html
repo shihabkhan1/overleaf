@@ -7,7 +7,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>2. Issues &#8212; How to setup Overleaf Community Edition</title>
   
@@ -395,19 +395,32 @@ document.write(`
 <h1><span class="section-number">2. </span>Issues<a class="headerlink" href="#issues" title="Permalink to this heading">#</a></h1>
 <section id="could-not-connect-to-docker">
 <h2><span class="section-number">2.1. </span>Could not connect to docker<a class="headerlink" href="#could-not-connect-to-docker" title="Permalink to this heading">#</a></h2>
-<p><img alt="" src="https://cdn.mathpix.com/cropped/2023_11_07_076a939ab2d3ecbe9f96g-7.jpg?height=156&amp;width=1515&amp;top_left_y=1421&amp;top_left_x=248" /></p>
-<p>Solution :</p>
+<blockquote>
+<div><p>ERROR: Couldn’t connect to Docker daemon at http+docker://localhost -
+is it running? If it’s at a non-standard location, specify the URL with the
+DOCKER_HOST environment variable.</p>
+</div></blockquote>
+<p><strong>Solution:</strong></p>
 <p>Give user permissions to docker</p>
-<p>$ sudo usermod -a -G docker $USER</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>usermod<span class="w"> </span>-a<span class="w"> </span>-G<span class="w"> </span>docker<span class="w"> </span><span class="nv">$USER</span>
+</pre></div>
+</div>
 </section>
 <section id="port-80-unavailable">
 <h2><span class="section-number">2.2. </span>Port 80 unavailable<a class="headerlink" href="#port-80-unavailable" title="Permalink to this heading">#</a></h2>
-<p>ERROR: for sharelatex Cannot start service sharelatex: driver failed programming external connectivity on endpoint sharelatex (742 e41424927f1729ac27b28aa852248f059514beefdbaac19422bb05689adce): Bind for 0.0.0.0:80 failed: port is already allocated</p>
-<p>Solution : Check for applications/processes using port 80 and get process id $\langle$ pid&gt;</p>
-<p>$ sudo lsof -i -P -n I grep LISTEN</p>
-<p>Kill process:</p>
-<p>$$$ kill $-9&lt;$ pid $&gt;$</p>
-<p>Note: If nothing works, remove all images and containers, close all processes, and reinstall overleaf.</p>
+<blockquote>
+<div><p>ERROR: for sharelatex Cannot start service sharelatex: driver failed programming external connectivity on endpoint sharelatex (742 e41424927f1729ac27b28aa852248f059514beefdbaac19422bb05689adce): Bind for 0.0.0.0:80 failed: port is already allocated</p>
+</div></blockquote>
+<p><strong>Solution:</strong></p>
+<p>First, check for applications/processes using port 80 and get process id $\langle$ pid&gt;</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>lsof<span class="w"> </span>-i<span class="w"> </span>-P<span class="w"> </span>-n<span class="w"> </span>I<span class="w"> </span>grep<span class="w"> </span>LISTEN
+</pre></div>
+</div>
+<p>Then kill the process:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">kill</span><span class="w"> </span>-9<span class="w"> </span>&lt;pid&gt;
+</pre></div>
+</div>
+<p><strong>NOTE:</strong> If nothing works, remove all images and containers, close all processes, and reinstall overleaf.</p>
 </section>
 </section>
 

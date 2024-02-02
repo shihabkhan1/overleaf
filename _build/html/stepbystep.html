@@ -7,7 +7,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>1. Step-by-Step &#8212; How to setup Overleaf Community Edition</title>
   
@@ -439,33 +439,33 @@ document.write(`
 <h3><span class="section-number">1.2.2. </span>List of useful docker commands<a class="headerlink" href="#list-of-useful-docker-commands" title="Permalink to this heading">#</a></h3>
 <ul>
 <li><p>List all docker containers:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">ps</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>ps
 </pre></div>
 </div>
 </li>
 <li><p>Kill running docker process</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">kill</span> <span class="o">&lt;</span><span class="n">container</span> <span class="n">ID</span><span class="o">&gt;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span><span class="nb">kill</span><span class="w"> </span>&lt;container<span class="w"> </span>ID&gt;
 </pre></div>
 </div>
 <p>Note: Use docker ps to obtain container IDs</p>
 </li>
 <li><p>Remove all docker containers:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker rm -f $\$($ docker ps $-a-q)$
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>$<span class="se">\$</span><span class="o">(</span>$<span class="w"> </span>docker<span class="w"> </span>ps<span class="w"> </span><span class="nv">$-</span>a-q<span class="o">)</span>$
 </pre></div>
 </div>
 </li>
 <li><p>Remove all docker images:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker rmi -f $(docker images -q)
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>rmi<span class="w"> </span>-f<span class="w"> </span><span class="k">$(</span>docker<span class="w"> </span>images<span class="w"> </span>-q<span class="k">)</span>
 </pre></div>
 </div>
 </li>
 <li><p>Open up a bash session inside sharelatex container:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">exec</span> <span class="o">-</span><span class="n">it</span> <span class="n">sharelatex</span> <span class="n">bash</span>    
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>sharelatex<span class="w"> </span>bash<span class="w">    </span>
 </pre></div>
 </div>
 </li>
 <li><p>Display container images:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">docker</span> <span class="n">images</span> <span class="o">--</span><span class="nb">format</span> <span class="s1">&#39;table {{.Repository}}</span><span class="se">\t</span><span class="s1">{{.Tag}}</span><span class="se">\t</span><span class="s1">{{.Size}}&#39;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span>images<span class="w"> </span>--format<span class="w"> </span><span class="s1">&#39;table {{.Repository}}\t{{.Tag}}\t{{.Size}}&#39;</span>
 </pre></div>
 </div>
 </li>
@@ -477,104 +477,117 @@ document.write(`
 <p>NOTE: Overleaf is still referred to as sharelatex in the containers, images, and directories created.</p>
 <section id="download-overleaf">
 <h3><span class="section-number">1.3.1. </span>Download Overleaf<a class="headerlink" href="#download-overleaf" title="Permalink to this heading">#</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">overleaf</span><span class="o">/</span><span class="n">overleaf</span><span class="o">.</span><span class="n">git</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/overleaf/overleaf.git
 </pre></div>
 </div>
 <p>Or download the repository from <a class="reference external" href="https://github.com/overleaf/overleaf.git">HERE</a></p>
 </section>
 <section id="edit-docker-compose-yml">
 <h3><span class="section-number">1.3.2. </span>Edit <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code><a class="headerlink" href="#edit-docker-compose-yml" title="Permalink to this heading">#</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> contains instructions for docker to run your overleaf instance with. In case you want to enable access to your overleaf instance for other users on the same network, uncomment the following lines from your docker-compose.yml:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nginx</span><span class="o">-</span><span class="n">proxy</span><span class="p">:</span>
-    <span class="n">image</span><span class="p">:</span> <span class="n">jwilder</span><span class="o">/</span><span class="n">nginx</span><span class="o">-</span><span class="n">proxy</span>
-    <span class="n">container_name</span><span class="p">:</span> <span class="n">nginx</span><span class="o">-</span><span class="n">proxy</span>
-    <span class="n">ports</span><span class="p">:</span>
-        <span class="c1">#- &quot;80:80&quot;</span>
-        <span class="o">-</span> <span class="s2">&quot;443:443&quot;</span>
-    <span class="n">volumes</span><span class="p">:</span>
-        <span class="o">-</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">docker</span><span class="o">.</span><span class="n">sock</span><span class="p">:</span><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">docker</span><span class="o">.</span><span class="n">sock</span><span class="p">:</span><span class="n">ro</span>
-        <span class="o">-</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">sharelatex</span><span class="o">/</span><span class="n">tmp</span><span class="p">:</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">certs</span>
+<p><code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> contains instructions for docker to run your overleaf instance with. In case you want to enable access to your overleaf instance for other users on the same network, uncomment the following lines from your <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nginx-proxy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jwilder/nginx-proxy</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx-proxy</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">        </span><span class="c1">#- &quot;80:80&quot;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;443:443&quot;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/run/docker.sock:/tmp/docker.sock:ro</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/sharelatex/tmp:/etc/nginx/certs</span>
 </pre></div>
 </div>
 <p>Note: In case there are other applications using your port 80 and 443 , there maybe some conflicts with your overleaf instance.</p>
 </section>
 <section id="accessing-overleaf">
 <h3><span class="section-number">1.3.3. </span>Accessing overleaf<a class="headerlink" href="#accessing-overleaf" title="Permalink to this heading">#</a></h3>
-<p>To access overleaf, go to http://localhost/launchpad on your overleaf host machine.</p>
-<p><img alt="" src="https://cdn.mathpix.com/cropped/2023_11_07_076a939ab2d3ecbe9f96g-5.jpg?height=55&amp;width=1694&amp;top_left_y=652&amp;top_left_x=181" />
-host machine.</p>
+<p>To access overleaf, go to <a class="reference external" href="http://localhost/launchpad">http://localhost/launchpad</a> on your overleaf host machine.</p>
+<p>For users within the same network, go to <code class="docutils literal notranslate"><span class="pre">http://&lt;ip&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">&lt;ip&gt;</span></code> is the IP of overleaf host machine.</p>
 </section>
 <section id="creating-users">
 <h3><span class="section-number">1.3.4. </span>Creating users<a class="headerlink" href="#creating-users" title="Permalink to this heading">#</a></h3>
 </section>
 <section id="create-admin-user">
 <h3><span class="section-number">1.3.5. </span>Create admin user<a class="headerlink" href="#create-admin-user" title="Permalink to this heading">#</a></h3>
-<ol class="arabic simple">
-<li><p>Create new user with the following command</p></li>
-</ol>
-<p>$ docker exec sharelatex/bin/bash -c “cd/var/www/sharelatex; grunt $\hookrightarrow$ user:create-admin –email=abc&#64;xyz.com”</p>
-<ol class="arabic simple" start="2">
-<li><p>Edit password token by substituting localhost with <ip></p></li>
+<ol class="arabic">
+<li><p>Create new user with the following command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>sharelatex<span class="w"> </span>/bin/bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;cd/var/www/sharelatex; grunt user:create-admin --email=abc@xyz.com&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Edit password token by substituting <code class="docutils literal notranslate"><span class="pre">localhost</span></code> with <code class="docutils literal notranslate"><span class="pre">&lt;ip&gt;</span></code></p></li>
 <li><p>Share edited token with user to create password</p></li>
 </ol>
 </section>
 </section>
 <section id="create-regular-user">
 <h2><span class="section-number">1.4. </span>Create regular user<a class="headerlink" href="#create-regular-user" title="Permalink to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p>Create new user with the following command</p></li>
-</ol>
-<p>$ docker exec sharelatex/bin/bash -c “cd/var/www/sharelatex; grunt $\rightarrow$ user:create –email=abc&#64;xyz.com”</p>
-<ol class="arabic simple" start="2">
-<li><p>Edit password token by substituting localhost with <ip></p></li>
+<ol class="arabic">
+<li><p>Create new user with the following command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>sharelatex<span class="w"> </span>/bin/bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;cd/var/www/sharelatex; grunt user:create --email=abc@xyz.com&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Edit password token by substituting <code class="docutils literal notranslate"><span class="pre">localhost</span></code> with <code class="docutils literal notranslate"><span class="pre">&lt;ip&gt;</span></code></p></li>
 <li><p>Share edited token with user to create password</p></li>
 </ol>
 <p>NOTE: (Alternatively) Admins can create regular users can also be created from the Overleaf launchpad.</p>
 <section id="delete-users">
 <h3><span class="section-number">1.4.1. </span>Delete users<a class="headerlink" href="#delete-users" title="Permalink to this heading">#</a></h3>
-<p><img alt="" src="https://cdn.mathpix.com/cropped/2023_11_07_076a939ab2d3ecbe9f96g-6.jpg?height=113&amp;width=1483&amp;top_left_y=369&amp;top_left_x=275" /></p>
-<p>NOTE: For more help on user management refer to THIS link.</p>
+<p>Similarly, you can delete a user with the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>sharelatex<span class="w"> </span>/bin/bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;cd /var/www/sharelatex; grunt user:delete --email=abc@xyz.com&quot;</span>
+</pre></div>
+</div>
+<p>NOTE: For more help on user management refer to <a class="reference external" href="https://github.com/overleaf/overleaf/wiki/Creating-and-managing-users">THIS</a> link.</p>
 </section>
 <section id="upgrading-texlive">
 <h3><span class="section-number">1.4.2. </span>Upgrading TeXLive<a class="headerlink" href="#upgrading-texlive" title="Permalink to this heading">#</a></h3>
 <p>Overleaf comes with TeXLive-basic preinstalled. In case you want to make any changes to the LaTeX packages, you can:</p>
-<ol class="arabic simple">
-<li><p>Open up a bash session in Overleaf container:</p></li>
+<ol class="arabic">
+<li><p>Open up a bash session in Overleaf container:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>sharelatex<span class="w"> </span>bash
+</pre></div>
+</div>
+</li>
+<li><p>Make changes through tlmgr:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tlmgr<span class="w"> </span>-gui
+</pre></div>
+</div>
+</li>
+<li><p>(Optional) A good strategy would be to upgrade the TeXlive installation to the full scheme as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>sharelatex<span class="w"> </span>tlmgr<span class="w"> </span>install<span class="w"> </span>scheme-full
+</pre></div>
+</div>
+</li>
+<li><p>Make a commit to the Overleaf container:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>commit<span class="w"> </span>sharelatex<span class="w"> </span>sharelatex/sharelatex:&lt;commit-message&gt;
+</pre></div>
+</div>
+</li>
+<li><p>Edit docker-compose.yml to use that image:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># ...</span>
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">sharelatex</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sharelatex/sharelatex:&lt;commit-message&gt;</span>
+<span class="c1"># ...</span>
+</pre></div>
+</div>
+</li>
+<li><p>Check new sharelatex image exists using:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span>images<span class="w"> </span>--format<span class="w"> </span><span class="s1">&#39;table {{.Repository}}\t{{.Tag}}\t{{.Size}}&#39;</span>
+</pre></div>
+</div>
+</li>
 </ol>
-<p>$$$ docker exec -it sharelatex bash</p>
-<ol class="arabic simple" start="2">
-<li><p>Make changes through tlmgr:</p></li>
-</ol>
-<p>$ tlmgr -gui</p>
-<ol class="arabic simple" start="3">
-<li><p>(Optional) A good strategy would be to upgrade the TeXlive installation to the full scheme as follows:</p></li>
-</ol>
-<p>$$
-\text { $ sudo docker exec sharelatex tlmgr install scheme-full }
-$$</p>
-<ol class="arabic simple" start="4">
-<li><p>Make a commit to the Overleaf container:</p></li>
-</ol>
-<p>$ docker commit sharelatex sharelatex/sharelatex:<commit-message></p>
-<ol class="arabic simple" start="5">
-<li><p>Edit docker-compose.yml to use that image:</p></li>
-</ol>
-<p><img alt="" src="https://cdn.mathpix.com/cropped/2023_11_07_076a939ab2d3ecbe9f96g-6.jpg?height=257&amp;width=1152&amp;top_left_y=2258&amp;top_left_x=469" /></p>
-<ol class="arabic simple" start="6">
-<li><p>Check new sharelatex image exists using:</p></li>
-</ol>
-<p>$$$ sudo docker images –format ‘table</p>
-<p>$\hookrightarrow{{$.Repository $}} \backslash t{{$.Tag $}} \backslash t{{$. Size $}}}^{\prime}$</p>
 </section>
 <section id="backing-up-overleaf-data">
 <h3><span class="section-number">1.4.3. </span>Backing up overleaf data<a class="headerlink" href="#backing-up-overleaf-data" title="Permalink to this heading">#</a></h3>
 <p>Backing up Overleaf data essentially boils down to backing up three directories:</p>
 <ol class="arabic simple">
-<li><p>/sharelatex_data</p></li>
-<li><p>/ /mongo_data</p></li>
-<li><p>/redis_databackup-new/</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">~/sharelatex_data</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">~/mongo_data</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">~/redis_databackup-new/</span></code></p></li>
 </ol>
-<p>For the recommended process of backing up Overleaf, check THIS link.</p>
+<p>For the recommended process of backing up Overleaf, check <a class="reference external" href="https://github.com/overleaf/overleaf/wiki/Backup-of-Data">THIS</a></p>
 </section>
 </section>
 </section>
