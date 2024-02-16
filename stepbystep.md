@@ -2,17 +2,18 @@
 ## Overview
 
 1. Install docker
-2. Install overleaf community edition
-3. Edit `docker-compose.yml`.
+2. Clone Overleaf Community Edition
+3. Change directory to downloaded overleaf directory
+4. Edit `docker-compose.yml`.
 
-    This will enable users within the same network to access overleaf
+    This will enable users within the same network to access overleaf using
+    Nginx server.
 
-4. Change directory to downloaded overleaf directory
 5. Run `docker-compose up`
 
     This will download all the libraries required for your overleaf instance
 
-6. Create users
+6. Create and Manage users
 
 ## Docker
 
@@ -74,7 +75,11 @@ Or download the repository from [HERE](https://github.com/overleaf/overleaf.git)
 
 ### Edit `docker-compose.yml`
 
-`docker-compose.yml` contains instructions for docker to run your overleaf instance with. In case you want to enable access to your overleaf instance for other users on the same network, uncomment the following lines from your `docker-compose.yml`:
+`docker-compose.yml` contains instructions for docker to run your overleaf 
+instance with. It is contained inside the cloned Overleaf Git repository. 
+In case you want to enable access to your overleaf instance for other users 
+on the same network via a Nginx, uncomment the following lines from 
+your `docker-compose.yml`:
     
 ```yaml
 nginx-proxy:
@@ -97,7 +102,7 @@ To access overleaf, go to [http://localhost/launchpad](http://localhost/launchpa
 
 For users within the same network, go to `http://<ip>`, where `<ip>` is the IP of overleaf host machine.
 
-### Creating users
+## Managing Users
 
 ### Create admin user
 
@@ -133,7 +138,7 @@ docker exec sharelatex /bin/bash -c "cd /var/www/sharelatex; grunt user:delete -
 
 NOTE: For more help on user management refer to [THIS](https://github.com/overleaf/overleaf/wiki/Creating-and-managing-users) link.
 
-### Upgrading TeXLive
+## Upgrading TeXLive
 
 Overleaf comes with TeXLive-basic preinstalled. In case you want to make any changes to the LaTeX packages, you can:
 
@@ -177,7 +182,7 @@ Overleaf comes with TeXLive-basic preinstalled. In case you want to make any cha
     sudo docker images --format 'table {{.Repository}}\t{{.Tag}}\t{{.Size}}'
     ```
 
-### Backing up overleaf data
+## Backing up overleaf data
 
 Backing up Overleaf data essentially boils down to backing up three directories:
 
