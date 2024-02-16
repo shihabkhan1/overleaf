@@ -22,4 +22,6 @@ Overleaf Community Edition is an open-source version of the popular online LaTeX
 
 ## How this guide is structured
 
+Test.
+
 ## How to contribute?
