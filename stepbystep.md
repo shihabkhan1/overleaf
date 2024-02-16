@@ -1,6 +1,8 @@
 # Step-by-Step
 ## Overview
 
+The overall steps are listed below:
+
 1. Install docker
 2. Clone Overleaf Community Edition
 3. Change directory to downloaded overleaf directory
@@ -14,6 +16,8 @@
     This will download all the libraries required for your overleaf instance
 
 6. Create and Manage users
+
+These steps are further elaborated in the following text.
 
 ## Docker
 Docker is a containerization platform that allows you to package applications
@@ -32,11 +36,16 @@ updating containers.
 
 ### Installation
 
+To install Docker on a Debian-based Linux OS, use the following command:
+
 ```
  sudo apt-get install docker-compose
 ```
 
 ### List of useful docker commands
+
+Keep a note of these commands so that you can debug, remove, and check your
+Overleaf instance image.
 
 - List all docker containers:
 
@@ -77,6 +86,9 @@ updating containers.
 ## Setting up Overleaf community edition
 
 NOTE: Overleaf is still referred to as sharelatex in the containers, images, and directories created.
+
+Setting up Overleaf is very simple. Just clone the GitHub repository and then
+customize the docker compose file if needed.
 
 ### Download Overleaf
 
