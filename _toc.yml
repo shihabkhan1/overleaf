@@ -1,7 +1,0 @@
-format: jb-book
-root: intro.md
-options:  # The options key will be applied to all chapters, but not sub-sections
-  numbered: True
-chapters:
-  - file: stepbystep.md
-  - file: issues.md
