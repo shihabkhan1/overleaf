@@ -16,6 +16,19 @@
 6. Create and Manage users
 
 ## Docker
+Docker is a containerization platform that allows you to package applications
+and their dependencies into isolated containers. Each container runs as a 
+lightweight, standalone, and executable package that includes everything needed
+to run the application, such as code, runtime, system tools, libraries, and settings.
+
+In the context of self-hosting Overleaf, Docker simplifies the deployment and 
+management of the Overleaf Community Edition application. Instead of installing
+Overleaf and its dependencies directly on the host system, Docker allows you to
+run Overleaf within a container. This container encapsulates the Overleaf 
+application and its dependencies, ensuring consistency and portability across 
+different environments. Docker also provides mechanisms for managing 
+containerized applications, including starting, stopping, scaling, and 
+updating containers.
 
 ### Installation
 
@@ -92,7 +105,12 @@ nginx-proxy:
         - /var/run/docker.sock:/tmp/docker.sock:ro
         - /home/sharelatex/tmp:/etc/nginx/certs
 ```
-    
+
+In the context of self-hosting Overleaf, Nginx is often used as a reverse proxy 
+server to forward incoming HTTP requests to the Overleaf application running 
+within Docker containers. Nginx acts as a gateway between external Overleaf
+users and the Overleaf application, providing an additional layer of security, 
+performance optimization, and flexibility in managing web traffic.
 
 Note: In case there are other applications using your port 80 and 443 , there maybe some conflicts with your overleaf instance.
 
