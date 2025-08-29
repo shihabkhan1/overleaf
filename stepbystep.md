@@ -190,26 +190,26 @@ Overleaf comes with TeXLive-basic preinstalled. In case you want to make any cha
     sudo docker exec sharelatex tlmgr install scheme-full
     ```
 
-4. Make a commit to the Overleaf container:
+4. Copy TexLive packages to the host:
 
     ```bash
-    docker commit sharelatex sharelatex/sharelatex:<commit-message>
+    podman cp overleaf:/usr/local/texlive ./
     ```
 
-5. Edit docker-compose.yml to use that image:
+5. Edit docker-compose.yml to mount packages from the host:
 
     ```yaml
     # ...
-    services:
-        sharelatex:
-            image: sharelatex/sharelatex:<commit-message>
+    volumes:
+            - ./overleaf/sharelatex_data:/var/lib/overleaf
+            - ./overleaf/texlive:/usr/local/texlive
     # ...
     ```
 
-6. Check new sharelatex image exists using:
+6. Relaunch everything:
 
     ```bash
-    sudo docker images --format 'table {{.Repository}}\t{{.Tag}}\t{{.Size}}'
+    docker-compose down -v
     ```
 
 ## Backing up overleaf data
