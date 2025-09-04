@@ -11,7 +11,8 @@ The overall steps are listed below:
     This will enable users within the same network to access overleaf using
     Nginx server.
 
-5. Run `docker-compose up`
+5. Run `podman-compose pull` and then
+    `podman-compose systemd -a register`
 
     This will download all the libraries required for your overleaf instance
 
@@ -39,7 +40,7 @@ updating containers.
 To install Docker on a Debian-based Linux OS, use the following command:
 
 ```
- sudo apt-get install docker-compose
+ sudo apt-get install podman-compose
 ```
 
 ### List of useful docker commands
@@ -50,37 +51,37 @@ Overleaf instance image.
 - List all docker containers:
 
     ```bash
-    docker ps
+    podman ps
     ```
 - Kill running docker process
 
     ```bash
-    docker kill <container ID>
+    podman kill <container ID>
     ```
-    Note: Use docker ps to obtain container IDs
+    Note: Use podman ps to obtain container IDs
 
 - Remove all docker containers:
 
     ```bash
-    docker rm -f $\$($ docker ps $-a-q)$
+    podman rm -f $\$($ docker ps $-a-q)$
     ```
     
 - Remove all docker images:
 
     ```bash
-    docker rmi -f $(docker images -q)
+    podman rmi -f $(docker images -q)
     ```
 
 - Open up a bash session inside sharelatex container:
 
     ```bash
-    docker exec -it sharelatex bash    
+    podman exec -it sharelatex bash    
     ```
 
 - Display container images:
 
     ```bash
-    sudo docker images --format 'table {{.Repository}}\t{{.Tag}}\t{{.Size}}'
+    sudo podman images --format 'table {{.Repository}}\t{{.Tag}}\t{{.Size}}'
     ```
 
 ## Setting up Overleaf community edition
@@ -127,6 +128,9 @@ performance optimization, and flexibility in managing web traffic.
 Note: In case there are other applications using your port 80 and 443 , there maybe some conflicts with your overleaf instance.
 
 ### Accessing overleaf
+First you may have to fix something following the [https://docs.overleaf.com/on-premises/release-notes/release-notes-4.x.x](releas notes):
+    `docker-compose exec mongo mongosh` follow by
+    `rs.initiate({ _id: "overleaf", members: [ { _id: 0, host: "mongo:27017" } ] })`
 
 To access overleaf, go to [http://localhost/launchpad](http://localhost/launchpad) on your overleaf host machine.
 
@@ -147,7 +151,7 @@ For users within the same network, go to `http://<ip>`, where `<ip>` is the IP o
 
 ## Create regular user
 
-1. Create new user with the following command
+1. Create new user with the following comman
 
     ```bash
     docker exec sharelatex /bin/bash -c "cd/var/www/sharelatex; grunt user:create --email=abc@xyz.com"
@@ -172,31 +176,15 @@ NOTE: For more help on user management refer to [THIS](https://github.com/overle
 
 Overleaf comes with TeXLive-basic preinstalled. In case you want to make any changes to the LaTeX packages, you can:
 
-1. Open up a bash session in Overleaf container:
-
-    ```bash
-    docker exec -it sharelatex bash
-    ```
-
-2. Make changes through tlmgr:
-
-    ```bash
-    tlmgr -gui
-    ```
-
-3. (Optional) A good strategy would be to upgrade the TeXlive installation to the full scheme as follows:
-
-    ```bash
-    sudo docker exec sharelatex tlmgr install scheme-full
-    ```
-
-4. Copy TexLive packages to the host:
+1. Copy TexLive packages to the host:
 
     ```bash
     podman cp overleaf:/usr/local/texlive ./
+    systemctl --user stop 'podman-compose@overleaf'
+    docker-compose down -v
     ```
 
-5. Edit docker-compose.yml to mount packages from the host:
+2. Edit docker-compose.yml to mount packages from the host:
 
     ```yaml
     # ...
@@ -205,12 +193,16 @@ Overleaf comes with TeXLive-basic preinstalled. In case you want to make any cha
             - ./overleaf/texlive:/usr/local/texlive
     # ...
     ```
+    and restart the service
+   `systemctl --user start 'podman-compose@overleaf'`
 
-6. Relaunch everything:
+   
+3. Upgrade the TeXlive installation to the full scheme as follows:
 
     ```bash
-    docker-compose down -v
+    podman exec overleaf tlmgr install scheme-full
     ```
+
 
 ## Backing up overleaf data
 
