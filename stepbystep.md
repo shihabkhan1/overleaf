@@ -128,10 +128,13 @@ performance optimization, and flexibility in managing web traffic.
 Note: In case there are other applications using your port 80 and 443 , there maybe some conflicts with your overleaf instance.
 
 ### Accessing overleaf
-First you may have to fix something following the [https://docs.overleaf.com/on-premises/release-notes/release-notes-4.x.x](releas notes):
-    `docker-compose exec mongo mongosh` follow by
-    `rs.initiate({ _id: "overleaf", members: [ { _id: 0, host: "mongo:27017" } ] })`
-
+First you may have to fix something following the [releas notes](https://docs.overleaf.com/on-premises/release-notes/release-notes-4.x.x):
+    
+    docker-compose exec mongo mongosh
+follow by
+    
+    rs.initiate({ _id: "overleaf", members: [ { _id: 0, host: "mongo:27017" } ] })
+    
 To access overleaf, go to [http://localhost/launchpad](http://localhost/launchpad) on your overleaf host machine.
 
 For users within the same network, go to `http://<ip>`, where `<ip>` is the IP of overleaf host machine.
@@ -140,7 +143,7 @@ For users within the same network, go to `http://<ip>`, where `<ip>` is the IP o
 
 ### Create admin user
 
-1. Create new user with the following command
+1. Create new user with the following command, don't forget to change email,
 
     ```bash
     docker exec sharelatex /bin/bash -c "cd/var/www/sharelatex; grunt user:create-admin --email=abc@xyz.com"
@@ -151,7 +154,7 @@ For users within the same network, go to `http://<ip>`, where `<ip>` is the IP o
 
 ## Create regular user
 
-1. Create new user with the following comman
+1. Create new user with the following comman, don't forget to change email,
 
     ```bash
     docker exec sharelatex /bin/bash -c "cd/var/www/sharelatex; grunt user:create --email=abc@xyz.com"
@@ -189,8 +192,8 @@ Overleaf comes with TeXLive-basic preinstalled. In case you want to make any cha
     ```yaml
     # ...
     volumes:
-            - ./overleaf/sharelatex_data:/var/lib/overleaf
-            - ./overleaf/texlive:/usr/local/texlive
+            - /path/to/overleaf/sharelatex_data:/var/lib/overleaf
+            - /path/to/overleaf/texlive:/usr/local/texlive
     # ...
     ```
     and restart the service
