@@ -190,19 +190,25 @@ Overleaf comes with TeXLive-basic preinstalled. In case you want to make any cha
     sudo docker exec sharelatex tlmgr install scheme-full
     ```
 
-4. After installing packages, run `tlmgr path add` to ensure newly installed binaries are available in the system PATH. This is particularly important for packages like `minted` that require external tools:
+4. Update tlmgr and all installed packages to avoid compatibility issues:
+
+    ```bash
+    sudo docker exec sharelatex tlmgr update --self --all
+    ```
+
+5. After installing packages, run `tlmgr path add` to ensure newly installed binaries are available in the system PATH. This is particularly important for packages like `minted` that require external tools:
 
     ```bash
     sudo docker exec sharelatex tlmgr path add
     ```
 
-5. Make a commit to the Overleaf container:
+6. Make a commit to the Overleaf container:
 
     ```bash
     docker commit sharelatex sharelatex/sharelatex:<commit-message>
     ```
 
-6. Edit docker-compose.yml to use that image:
+7. Edit docker-compose.yml to use that image:
 
     ```yaml
     # ...
@@ -212,7 +218,7 @@ Overleaf comes with TeXLive-basic preinstalled. In case you want to make any cha
     # ...
     ```
 
-7. Check new sharelatex image exists using:
+8. Check new sharelatex image exists using:
 
     ```bash
     sudo docker images --format 'table {{.Repository}}\t{{.Tag}}\t{{.Size}}'
