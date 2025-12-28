@@ -136,27 +136,27 @@ For users within the same network, go to `http://<ip>`, where `<ip>` is the IP o
 
 ### Create admin user
 
-1. Create new user with the following command
+1. Create new user with the following command (replace `abc@xyz.com` with the actual email address):
 
     ```bash
-    docker exec sharelatex /bin/bash -c "cd/var/www/sharelatex; grunt user:create-admin --email=abc@xyz.com"
+    docker exec sharelatex /bin/bash -c "cd /var/www/sharelatex; grunt user:create-admin --email=abc@xyz.com"
     ```
 
 2. Edit password token by substituting `localhost` with `<ip>`
 3. Share edited token with user to create password
 
-## Create regular user
+### Create regular user
 
-1. Create new user with the following command
+1. Create new user with the following command (replace `abc@xyz.com` with the actual email address):
 
     ```bash
-    docker exec sharelatex /bin/bash -c "cd/var/www/sharelatex; grunt user:create --email=abc@xyz.com"
+    docker exec sharelatex /bin/bash -c "cd /var/www/sharelatex; grunt user:create --email=abc@xyz.com"
     ```
 
 2. Edit password token by substituting `localhost` with `<ip>`
 3. Share edited token with user to create password
 
-NOTE: (Alternatively) Admins can create regular users can also be created from the Overleaf launchpad.
+NOTE: Alternatively, regular users can also be created from the Overleaf launchpad by admins.
 
 ### Delete users
 
@@ -190,13 +190,19 @@ Overleaf comes with TeXLive-basic preinstalled. In case you want to make any cha
     sudo docker exec sharelatex tlmgr install scheme-full
     ```
 
-4. Make a commit to the Overleaf container:
+4. After installing packages, run `tlmgr path add` to ensure newly installed binaries are available in the system PATH. This is particularly important for packages like `minted` that require external tools:
+
+    ```bash
+    sudo docker exec sharelatex tlmgr path add
+    ```
+
+5. Make a commit to the Overleaf container:
 
     ```bash
     docker commit sharelatex sharelatex/sharelatex:<commit-message>
     ```
 
-5. Edit docker-compose.yml to use that image:
+6. Edit docker-compose.yml to use that image:
 
     ```yaml
     # ...
@@ -206,7 +212,7 @@ Overleaf comes with TeXLive-basic preinstalled. In case you want to make any cha
     # ...
     ```
 
-6. Check new sharelatex image exists using:
+7. Check new sharelatex image exists using:
 
     ```bash
     sudo docker images --format 'table {{.Repository}}\t{{.Tag}}\t{{.Size}}'
@@ -221,3 +227,27 @@ Backing up Overleaf data essentially boils down to backing up three directories:
 3. `~/redis_databackup-new/`
 
 For the recommended process of backing up Overleaf, check [THIS](https://github.com/overleaf/overleaf/wiki/Backup-of-Data)
+
+## Deploying on WSL2 (Work in Progress)
+
+> **Note:** This section is a work in progress. Contributions and feedback are welcome!
+
+If you are deploying Overleaf on Windows Subsystem for Linux 2 (WSL2), be aware that WSL2 uses a different networking model than traditional Linux installations. By default, WSL2 runs with a NAT-based network adapter, which means:
+
+- Services running inside WSL2 are not directly accessible from other machines on your local network
+- The IP address of your WSL2 instance may change between reboots
+- Port forwarding from Windows to WSL2 requires additional configuration
+
+### Known Challenges
+
+1. **LAN Access**: Other devices on your network cannot access Overleaf by default
+2. **Dynamic IP**: WSL2's internal IP address is not static
+3. **Port Forwarding**: Windows firewall and port forwarding rules may need to be configured
+
+### Potential Solutions
+
+- Use `netsh interface portproxy` to forward ports from Windows to WSL2
+- Consider using WSL2's mirrored networking mode (available in newer Windows versions)
+- Set up a static IP for your WSL2 instance
+
+More detailed instructions will be added in future updates. If you have successfully deployed Overleaf on WSL2, please consider contributing your setup notes!
